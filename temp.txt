@@ -1,0 +1,15 @@
+we can make this tool project specific - 
+    we can have project data stored in the pinecone, pinecone particularly created for that project only
+    with that AI can get that data from there and can suggest better results and can understand the flow also.
+    this way the tool will be specific to project.
+    - Harshit Rathore
+
+add one line in prompt - 
+    dont change naming convention if you feel
+    the function, variable is getting used in some other file
+    we may take this in separate delimeter and can give to user in some text file
+    - Harshit Rathore
+
+let user say, what refatoring they want -
+    in some manner,  we should get some msg while user raise the PR
+    this will help AI understand, what the user needed actually from refatoring pipeline
