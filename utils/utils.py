@@ -6,7 +6,6 @@ import  json
 import base64
 import tiktoken
 import requests
-from colorama import Fore
 
 from Enums.Enum_data import StatusCodes
 import os
