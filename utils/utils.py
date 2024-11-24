@@ -116,39 +116,39 @@ def update_readme(base_dir, changed_files) -> str:
     """
     try:
         for root, dirs, files in os.walk(base_dir):
-            if any(file in changed_files for file in files):
-                print("Found a changed file!")
-                if any(dir.startswith('.') for dir in dirs):
-                    dirs[:] = [d for d in dirs if not d.startswith('.')]
-                
-                contents = ""
-                for file in files:
-                    print("File:", file)
-                    if file.endswith('.md'):
-                        print("Found a markdown file!")
-                    else:
-                        print("Not a markdown file!")
-                        print(os.path.join(root, file))
-                        with open(os.path.join(root, file), 'r', encoding="utf-8") as f:
-                            try:
-                                contents += f.read()
-                                print("Contents:", len(contents))
-
-                            except Exception as e:
-                                print("Error reading file:", e)
-                                contents += ""
-                # print("Contents:", contents)
-                markdown = generate_readme_content(contents)
-                # markdown = ""
-                readme_path = os.path.join(root, 'README.md')
-                if os.path.exists(readme_path):
-                    print("README file exists!")
-                    with open(readme_path, 'a') as readme_file:
-                        readme_file.write(markdown)
+            # if any(file in changed_files for file in files):
+            print("Found a changed file!")
+            if any(dir.startswith('.') for dir in dirs):
+                dirs[:] = [d for d in dirs if not d.startswith('.')]
+            
+            contents = ""
+            for file in files:
+                print("File:", file)
+                if file.endswith('.md'):
+                    print("Found a markdown file!")
                 else:
-                    print("README file does not exist!")
-                    with open(readme_path, 'w') as readme_file:
-                        readme_file.write(markdown)
+                    print("Not a markdown file!")
+                    print(os.path.join(root, file))
+                    with open(os.path.join(root, file), 'r', encoding="utf-8") as f:
+                        try:
+                            contents += f.read()
+                            print("Contents:", len(contents))
+
+                        except Exception as e:
+                            print("Error reading file:", e)
+                            contents += ""
+            # print("Contents:", contents)
+            markdown = generate_readme_content(contents)
+            # markdown = ""
+            readme_path = os.path.join(root, 'README.md')
+            if os.path.exists(readme_path):
+                print("README file exists!")
+                with open(readme_path, 'a') as readme_file:
+                    readme_file.write(markdown)
+            else:
+                print("README file does not exist!")
+                with open(readme_path, 'w') as readme_file:
+                    readme_file.write(markdown)
 
         return "Successfully updated README files."
     except Exception as e:
