@@ -339,6 +339,9 @@ def main_function(data: dict, flow: str) -> tuple:
 
         if flow == "normal":
             refactored_code_list, test_case_list, changed_files, readme_status = project.refactor_unittest_pipeline(data, file_extensions=file_extensions, repo_directory=repo_directory, assistants=PythonAssistants)
+            if refactored_code_list == []:  
+                ans["status"] = "No refactoring done"
+                return ans, StatusCodes.SUCCESS.value
             ans, status_code = post_refactor_unittest(refactored_code_list, test_case_list, changed_files, git_utils, data["branch"], data['user_name'])
         elif flow == "feedback_refactor":
             post_feedback_refactor_pipeline()

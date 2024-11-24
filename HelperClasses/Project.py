@@ -1,6 +1,7 @@
 
 import logging
 import os
+import re
 import traceback
 from typing import List, Tuple
 
@@ -91,7 +92,9 @@ class Project(Interface):
             source_branch=data["branch"]
             default_branch=data["default_branch"]
 
-
+            if re.match(r'^refactor_.*_\d{1,4}$', source_branch):
+                return [], [], [], []
+            
             # get changed files from the source branch
             self.git_utils.git_checkout_and_pull(source_branch)
             files_to_ignore = self.git_utils.get_files_to_ignore(commit_msg)
@@ -157,7 +160,7 @@ class Project(Interface):
                 "source branch": source_branch,
             }
             handle_exception("Error in refactor unittest pipeline", data, e, traceback.print_exc(), error_code=0)
-            return [], [], []
+            return [], [], [], []
         
         
     def document_change_explanation_pipeline(self, data: dict) -> Tuple[dict, int]:
