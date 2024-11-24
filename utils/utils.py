@@ -106,55 +106,77 @@ def send_to_generatereadme_assistant(content):
 
     return response
 
-
-def update_readme(base_dir, changed_files) -> str:
-    """
-    Walks through all the folders, and updates the README file according to the files changed
-
-    Returns:
-        str: The status of the update.
-    """
+def update_readme(base_dir, changed_files):
     try:
-        for root, dirs, files in os.walk(base_dir):
-            # if any(file in changed_files for file in files):
-            print("Found a changed file!")
-            if any(dir.startswith('.') for dir in dirs):
-                dirs[:] = [d for d in dirs if not d.startswith('.')]
-            
-            contents = ""
-            for file in files:
-                print("File:", file)
-                if file.endswith('.md'):
-                    print("Found a markdown file!")
-                else:
-                    print("Not a markdown file!")
-                    print(os.path.join(root, file))
-                    with open(os.path.join(root, file), 'r', encoding="utf-8") as f:
-                        try:
-                            contents += f.read()
-                            print("Contents:", len(contents))
+        root_readme_path = os.path.join(base_dir, "README.md")
 
-                        except Exception as e:
-                            print("Error reading file:", e)
-                            contents += ""
-            # print("Contents:", contents)
-            markdown = generate_readme_content(contents)
-            # markdown = ""
-            readme_path = os.path.join(root, 'README.md')
-            if os.path.exists(readme_path):
-                print("README file exists!")
-                with open(readme_path, 'a') as readme_file:
-                    readme_file.write(markdown)
-            else:
-                print("README file does not exist!")
-                with open(readme_path, 'w') as readme_file:
-                    readme_file.write(markdown)
+        # Handle the root README
+        if not os.path.exists(root_readme_path):
+            print(f"Creating README in {base_dir}")
+            with open(root_readme_path, "w") as f:
+                content = gather_directory_contents(base_dir)
+                readme_content = generate_readme_content(content)
+                f.write(readme_content)  # Create a README with generated content
+        else:
+            print(f"Updating root README in {base_dir}")
+            content = gather_directory_contents(base_dir)
+            readme_content = generate_readme_content(content)
+            with open(root_readme_path, "w") as f:
+                f.write(readme_content)
+
+        # Handle subdirectories
+        for root, dirs, files in os.walk(base_dir):
+            for dir_name in dirs:
+                dir_path = os.path.join(root, dir_name)
+                readme_path = os.path.join(dir_path, "README.md")
+
+                # Check if README exists
+                if not os.path.exists(readme_path):
+                    print(f"Creating README in {dir_path}")
+                    with open(readme_path, "w") as f:
+                        content = gather_directory_contents(dir_path)
+                        readme_content = generate_readme_content(content)
+                        f.write(readme_content)
+                else:
+                    # Check if any changed file exists in the current directory
+                    for changed_file in changed_files:
+                        if os.path.commonpath([dir_path, os.path.join(base_dir, changed_file)]) == dir_path:
+                            print(f"Updating README in {dir_path}")
+                            content = gather_directory_contents(dir_path)
+                            readme_content = generate_readme_content(content)
+                            with open(readme_path, "w") as f:
+                                f.write(readme_content)
+                            break
 
         return "Successfully updated README files."
     except Exception as e:
         data = {}
-        handle_exception("Error while updating README files", data, e, traceback.print_exc(), error_code=0)
+        # handle_exception("Error while updating README files", data, e, traceback.print_exc(), error_code=0)
         return "Failed to update README files."
+
+
+def gather_directory_contents(directory):
+    """
+    Gather the contents of all files in the specified directory.
+
+    Args:
+        directory: The path of the directory.
+
+    Returns:
+        str: A concatenated string of all file contents.
+    """
+    contents = []
+    for root, _, files in os.walk(directory):
+        for file_name in files:
+            file_path = os.path.join(root, file_name)
+            if os.path.isfile(file_path):  # Ensure it's a regular file
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as file:
+                        contents.append(f"File: {file_name}\n{file.read()}\n")
+                except Exception as e:
+                    print(f"Error reading file {file_path}: {e}")
+    return "\n".join(contents)
+
 
 def generate_readme_content(contents: str) -> str:
     """
@@ -172,8 +194,7 @@ def generate_readme_content(contents: str) -> str:
     except Exception as e:
         data = {"contents": contents}
         print("Error while generating README content. ", e)
-        return ""
-
+        return "Error generating README content."
 
 def handle_exception(error: str, data: dict, exception: Exception, trace: str, error_code: int = 0) -> None:
     """

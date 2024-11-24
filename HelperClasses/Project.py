@@ -91,9 +91,6 @@ class Project(Interface):
             commit_msg=data['commit msg']
             source_branch=data["branch"]
             default_branch=data["default_branch"]
-
-            if re.match(r'^refactor_.*_\d{1,4}$', source_branch):
-                return [], [], [], []
             
             # get changed files from the source branch
             self.git_utils.git_checkout_and_pull(source_branch)
