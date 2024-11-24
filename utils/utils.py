@@ -173,6 +173,8 @@ def gather_directory_contents(directory):
                 try:
                     with open(file_path, 'r', encoding="utf-8") as file:
                         contents.append(f"File: {file_name}\n{file.read()}\n")
+                except UnicodeDecodeError:
+                    print(f"Error reading file {file_path}: UnicodeDecodeError")
                 except Exception as e:
                     print(f"Error reading file {file_path}: {e}")
     return "\n".join(contents)
