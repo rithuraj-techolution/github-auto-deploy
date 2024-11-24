@@ -113,7 +113,7 @@ def update_readme(base_dir, changed_files):
         # Handle the root README
         if not os.path.exists(root_readme_path):
             print(f"Creating README in {base_dir}")
-            with open(root_readme_path, "w") as f:
+            with open(root_readme_path, "w", encoding="utf-8") as f:
                 content = gather_directory_contents(base_dir)
                 readme_content = generate_readme_content(content)
                 f.write(readme_content)  # Create a README with generated content
@@ -121,7 +121,7 @@ def update_readme(base_dir, changed_files):
             print(f"Updating root README in {base_dir}")
             content = gather_directory_contents(base_dir)
             readme_content = generate_readme_content(content)
-            with open(root_readme_path, "w") as f:
+            with open(root_readme_path, "w", encoding="utf-8") as f:
                 f.write(readme_content)
 
         # Handle subdirectories
@@ -133,7 +133,7 @@ def update_readme(base_dir, changed_files):
                 # Check if README exists
                 if not os.path.exists(readme_path):
                     print(f"Creating README in {dir_path}")
-                    with open(readme_path, "w") as f:
+                    with open(readme_path, "w", encoding="utf-8") as f:
                         content = gather_directory_contents(dir_path)
                         readme_content = generate_readme_content(content)
                         f.write(readme_content)
@@ -144,7 +144,7 @@ def update_readme(base_dir, changed_files):
                             print(f"Updating README in {dir_path}")
                             content = gather_directory_contents(dir_path)
                             readme_content = generate_readme_content(content)
-                            with open(readme_path, "w") as f:
+                            with open(readme_path, "w", encoding="utf-8") as f:
                                 f.write(readme_content)
                             break
 
@@ -171,7 +171,7 @@ def gather_directory_contents(directory):
             file_path = os.path.join(root, file_name)
             if os.path.isfile(file_path):  # Ensure it's a regular file
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as file:
+                    with open(file_path, 'r', encoding="utf-8") as file:
                         contents.append(f"File: {file_name}\n{file.read()}\n")
                 except Exception as e:
                     print(f"Error reading file {file_path}: {e}")
