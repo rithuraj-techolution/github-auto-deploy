@@ -9,8 +9,8 @@ from utils.utils import handle_exception
 
 env = os.environ.get('ENV', 'dev')
 # PROJECT_ID = os.environ.get('PROJECT_ID')
-PROJECT_ID = "lumbar-poc"
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/Users/rithurajnambiar/Documents/demo-setup/credentials.json"
+# PROJECT_ID = "lumbar-poc"
+# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/Users/rithurajnambiar/Documents/demo-setup/credentials.json"
 #for local env
 # PROJECT_ID = 'sylvan-dev'
 
@@ -81,8 +81,8 @@ class CConfig:
     REPO_NAME = ''
     BASE_PATH = f'D:\\Techolution Projects\\Sylvan Stuff\\sylvan-backend\\{REPO_NAME}'
     AUTH_URL = ""
-    GIT_USERNAME = "harshit-rathore3"
-    GIT_EMAIL = "harshit.rathore@techolution.com"
+    GIT_USERNAME = "rithuraj-techolution"
+    GIT_EMAIL = "rithuraj.nambiar@techolution.com"
     ORGANIZATION = ""
     FILE_EXTENSIONS = [".c"]
 
@@ -115,10 +115,10 @@ class PythonConfig:
     TOKEN = ""
     REPO_NAME = ''
     BASE_PATH = f'D:\\Techolution Projects\\Sylvan Stuff\\sylvan-backend\\{REPO_NAME}'
-    GIT_CLONE_URLS = [f"https://{TOKEN}@github.com/harshit-rathore3/{REPO_NAME}.git"]
+    GIT_CLONE_URLS = [f"https://{TOKEN}@github.com/rithuraj-techolution/{REPO_NAME}.git"]
     AUTH_URL = ""
-    GIT_USERNAME = "harshit-rathore3"
-    GIT_EMAIL = "harshit.rathore@techolution.com"
+    GIT_USERNAME = "rithuraj-techolution"
+    GIT_EMAIL = "rithuraj.nambiar@techolution.com"
     ORGANIZATION = ""
     FILE_EXTENSIONS = [".py"]
 
@@ -149,10 +149,10 @@ class JavascriptConfig:
     TOKEN = ""
     REPO_NAME = ""
     BASE_PATH = f"D:\\Techolution Projects\\Sylvan Stuff\\sylvan-backend\\{REPO_NAME}"
-    GIT_CLONE_URLS = [f"https://{TOKEN}@github.com/harshit-rathore3/{REPO_NAME}.git"]
+    GIT_CLONE_URLS = [f"https://{TOKEN}@github.com/rithuraj-techolution/{REPO_NAME}.git"]
     AUTH_URL = ""
-    GIT_USERNAME = "harshit-rathore3"
-    GIT_EMAIL = "harshit.rathore@techolution.com"
+    GIT_USERNAME = "rithuraj-techolution"
+    GIT_EMAIL = "rithuraj.nambiar@techolution.com"
     ORGANIZATION = ""
     LONG_CODE_REFACTOR_API = "https://autoai-backend-exjsxe2nda-uc.a.run.app/javascriptParser/refactorCode"
     FILE_EXTENSIONS = [".js"]
@@ -186,10 +186,10 @@ class TypescriptConfig:
     TOKEN = ""
     REPO_NAME = ""
     BASE_PATH = f"D:\\Techolution Projects\\Sylvan Stuff\\sylvan-backend\\{REPO_NAME}"
-    GIT_CLONE_URLS = [f"https://{TOKEN}@github.com/harshit-rathore3/{REPO_NAME}.git"]
+    GIT_CLONE_URLS = [f"https://{TOKEN}@github.com/rithuraj-techolution/{REPO_NAME}.git"]
     AUTH_URL = ""
-    GIT_USERNAME = "parinaysethtecholution"
-    GIT_EMAIL = "parinay.seth@techolution.com"
+    GIT_USERNAME = "rithuraj-techolution"
+    GIT_EMAIL = "rithuraj.nambiar@techolution.com"
     ORGANIZATION = ""
     FILE_EXTENSIONS = [".ts", ".tsx"]
 
@@ -222,10 +222,10 @@ class DocumentConfig:
     TOKEN = ""
     REPO_NAME = ""
     BASE_PATH = f"D:\\Techolution Projects\\Sylvan Stuff\\sylvan-backend\\{REPO_NAME}"
-    GIT_CLONE_URLS = [f"https://{TOKEN}@github.com/harshit-rathore3/{REPO_NAME}.git"]
+    GIT_CLONE_URLS = [f"https://{TOKEN}@github.com/rithuraj-techolution/{REPO_NAME}.git"]
     AUTH_URL = ""
-    GIT_USERNAME = "parinaysethtecholution"
-    GIT_EMAIL = "parinay.seth@techolution.com"
+    GIT_USERNAME = "rithuraj-techolution"
+    GIT_EMAIL = "rithuraj.nambiar@techolution.com"
     ORGANIZATION = ""
     FILE_EXTENSIONS = [""]
 
