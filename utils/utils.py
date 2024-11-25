@@ -125,35 +125,34 @@ def update_readme(base_dir, changed_files):
             with open(root_readme_path, "w", encoding="utf-8") as f:
                 f.write(readme_content)
 
+        print("Base Directory : ", base_dir)
         # Handle subdirectories
         for root, dirs, files in os.walk(base_dir):
             print("Handling subdirectories... ", root)
+            # Exclude hidden directories
+            dirs[:] = [d for d in dirs if not d.startswith('.')]
             for dir_name in dirs:
                 print("Directory Name - ", dir_name)
-                if not dir_name.startswith("."):
-                    print("Directory is not a hidden one!")
-                    dir_path = os.path.join(root, dir_name)
-                    readme_path = os.path.join(dir_path, "README.md")
+                dir_path = os.path.join(root, dir_name)
+                readme_path = os.path.join(dir_path, "README.md")
 
-                    # Check if README exists
-                    if not os.path.exists(readme_path):
-                        print(f"Creating README in {dir_path}")
-                        with open(readme_path, "w", encoding="utf-8") as f:
+                # Check if README exists
+                if not os.path.exists(readme_path):
+                    print(f"Creating README in {dir_path}")
+                    with open(readme_path, "w", encoding="utf-8") as f:
+                        content = gather_directory_contents(dir_path)
+                        readme_content = generate_readme_content(content)
+                        f.write(readme_content)
+                else:
+                    # Check if any changed file exists in the current directory
+                    for changed_file in changed_files:
+                        if os.path.commonpath([dir_path, os.path.join(base_dir, changed_file)]) == dir_path:
+                            print(f"Updating README in {dir_path}")
                             content = gather_directory_contents(dir_path)
                             readme_content = generate_readme_content(content)
-                            f.write(readme_content)
-                    else:
-                        # Check if any changed file exists in the current directory
-                        for changed_file in changed_files:
-                            if os.path.commonpath([dir_path, os.path.join(base_dir, changed_file)]) == dir_path:
-                                print(f"Updating README in {dir_path}")
-                                content = gather_directory_contents(dir_path)
-                                readme_content = generate_readme_content(content)
-                                with open(readme_path, "w", encoding="utf-8") as f:
-                                    f.write(readme_content)
-                                break
-                else:
-                    print(f"Skipping hidden directory {dir_name}")
+                            with open(readme_path, "w", encoding="utf-8") as f:
+                                f.write(readme_content)
+                            break
 
         return "Successfully updated README files."
     except Exception as e:
@@ -164,7 +163,7 @@ def update_readme(base_dir, changed_files):
 
 def gather_directory_contents(directory):
     """
-    Gather the contents of all files in the specified directory.
+    Gather the contents of all files in the specified directory, excluding hidden directories.
 
     Args:
         directory: The path of the directory.
@@ -173,7 +172,9 @@ def gather_directory_contents(directory):
         str: A concatenated string of all file contents.
     """
     contents = []
-    for root, _, files in os.walk(directory):
+    for root, dirs, files in os.walk(directory):
+        # Exclude hidden directories
+        dirs[:] = [d for d in dirs if not d.startswith('.')]
         for file_name in files:
             file_path = os.path.join(root, file_name)
             if os.path.isfile(file_path):  # Ensure it's a regular file

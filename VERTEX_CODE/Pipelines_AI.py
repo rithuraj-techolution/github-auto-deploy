@@ -389,7 +389,7 @@ def perform_refactoring(data, file_path, assistant_name, approach="whole file",
                                                 """
                 print("Prompts Generated")
                 # print(prompt)
-                124 = assistant_name[2]
+                assistant = assistant_name[2]
                 print("Assistant Received --- ",assistant)
 
                 system_prompt, user_prompt = get_predictAPI_prompt(assistant_name=assistant, original_code=prompt, coding_standards=user_coding_standards)
