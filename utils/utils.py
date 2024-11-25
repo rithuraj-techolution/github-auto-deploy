@@ -1,6 +1,7 @@
 
 import subprocess
 import traceback
+import uuid
 from typing import List, Tuple
 import  json
 import base64
@@ -46,7 +47,7 @@ def send_to_ellm_agent(query, system_prompt):
     "database_index": "techolution-generatereadme",
     "isCoPilotOn": True,
     "slack_webhook_url": "",
-    "requestId": "requestId-66ed8a47-c936-406c-919f-7cb7345ceba5",
+    "requestId": f"requestId-{uuid.uuid4()}",
     "chatLowConfidenceMessage": "This is a readme file",
     "autoai": "673f3c0b2827327b51fdfdf1",
     "documentRetrieval": "673f3c0b2827327b51fdfdd6",
