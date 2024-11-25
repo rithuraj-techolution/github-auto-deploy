@@ -427,7 +427,8 @@ def perform_refactoring(data, file_path, assistant_name, approach="whole file",
                     if file_extension == ".ts" or file_extension == ".tsx":
                         updated_code, status_code = longer_code_direct_call(system_prompt, user_prompt)
                         return updated_code, StatusCodes.SUCCESS.value
-                    egpt_resp = calling_claude35(user_prompt=user_prompt, system_prompt=system_prompt)
+                    # egpt_resp = calling_claude35(user_prompt=user_prompt, system_prompt=system_prompt)
+                    egpt_resp = send_to_ellm_agent(query=user_prompt, system_prompt=system_prompt)
                     print("EGPT Response --- ", egpt_resp)
                     # egpt_resp = stream_inference(code_with_line_num, assistant_name[0])
                     if egpt_resp:
