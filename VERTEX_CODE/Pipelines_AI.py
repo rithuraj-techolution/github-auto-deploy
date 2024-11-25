@@ -11,7 +11,7 @@ import config
 import base64
 from VERTEX_CODE.EGPT_AI_Predict import calling_claude35, get_predict_response, longer_code_response
 from VERTEX_CODE.prompt_storage import get_difference_explanation_prompts, get_feedback_refactor_prompts, get_predictAPI_prompt, get_test_cases_prompt, typescript_prompts
-from utils.utils import num_tokens_from_string, handle_exception, get_coding_standards
+from utils.utils import num_tokens_from_string, handle_exception, get_coding_standards, send_to_ellm_agent
 from VERTEX_CODE.EGPT_AI import stream_inference
 from Enums.Enum_data import StatusCodes
 from config import JavascriptConfig
@@ -389,14 +389,15 @@ def perform_refactoring(data, file_path, assistant_name, approach="whole file",
                                                 """
                 print("Prompts Generated")
                 # print(prompt)
-                assistant = assistant_name[2]
+                124 = assistant_name[2]
                 print("Assistant Received --- ",assistant)
 
                 system_prompt, user_prompt = get_predictAPI_prompt(assistant_name=assistant, original_code=prompt, coding_standards=user_coding_standards)
 
                 # print("System Prompt ---", system_prompt, "\n", "User_Prompt --- ", user_prompt)
                 # egpt_resp = get_predict_response(user_prompt=user_prompt, system_prompt=system_prompt, assistant_name=assistant)
-                egpt_resp = calling_claude35(user_prompt=user_prompt, system_prompt=system_prompt)
+                egpt_resp = send_to_ellm_agent(query=user_prompt, system_prompt=system_prompt)
+                # egpt_resp = calling_claude35(user_prompt=user_prompt, system_prompt=system_prompt)
                 print("EGPT Response --- ", egpt_resp)
                 
                 # egpt_resp = stream_inference(prompt, assistant)

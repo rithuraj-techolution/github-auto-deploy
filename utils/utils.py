@@ -8,10 +8,11 @@ import tiktoken
 import requests
 
 from Enums.Enum_data import StatusCodes
+from VERTEX_CODE.prompt_storage import get_read_me_prompt
 import os
 import re
 
-def send_to_generatereadme_assistant(content):
+def send_to_ellm_agent(query, system_prompt):
     url = "https://dev-egpt.techo.camp/predict"
 
     payload = json.dumps({
@@ -23,8 +24,8 @@ def send_to_generatereadme_assistant(content):
     "userId": "11b17fe5-d3e1-475d-8a7c-35fdc8788fea",
     "userName": "rithuraj nambiar",
     "assistant_type": "normal",
-    "question": content,
-    "prompt": "About You:\nYour name is generatereadme. Your tone should be Friendly and Casual and Supportive.\n\nYour Expertise: Customer Assistant.\n---\n\n**Prompt:**\n\nYou are tasked with generating a detailed `README.md` file for a project containing multiple standalone files. Each file serves a distinct purpose. The README should clearly document the purpose and functionality of each file in the project. Include the following sections in the README:\n\n1. **Project Title**: A clear and concise title for the project.\n   \n2. **Overview**: A brief overview of the project, explaining its purpose and how the standalone files contribute to the overall goal of the project.\n\n3. **File Descriptions**:  \n   For each standalone file, include:\n   - **File Name**: The name of the file.\n   - **Purpose**: A summary of what the file does.\n   - **Functions and Features**: A detailed list of all the functions or key features in the file. For each function, include:\n     - Function name\n     - Brief description of its purpose\n     - Input parameters and expected output\n     - Example usage (if applicable)\n   - **Dependencies**: Any external libraries or tools required by the file.\n\n4. **Setup Instructions**: Provide a step-by-step guide for setting up and running any of the files. Include installation of dependencies and any configuration needed.\n\n5. **Usage Guide**: Instructions on how to run each file, with examples of commands, input data, and expected results.\n\n6. **Examples**: Provide usage examples for specific files or functions, demonstrating how they work in practice.\n\n7. **How the Files Relate**: If the files interact or can be used together, explain how they integrate or complement each other.\n\n8. **Contributing**: Guidelines for contributing to the project, including adding new files or enhancing existing ones.\n\n9. **License**: Details about the license under which the project is distributed.\n\n10. **Contact**: Information for users to reach out with questions, issues, or contributions.\n\nEnsure the README is structured in Markdown format with appropriate headings and subheadings. Use code blocks to demonstrate function usage or command examples, and provide links to documentation for any external dependencies if applicable, You should only return a markdown nothing else, dont start with ```markdown, just give it in raw manner, so that I would be able to parse it directly, any response given by you should be in markdown syntax.\n\nYour Task:\nA user is having a conversation with you. Your task is to consider the question and the given set of contexts and answer accordingly.\n\nNote:\n1. Don't use your own knowledge to answer the question. Only consider the given context to answer the questions about the given domain.\n2. If the user is asking about the particular product only consider the context documents which relate to the question.\n3. You are given a set of documents separated with ^^^ at the beginning and end. Use these documents to answer the question.\n4. Give your response within 150 words.\n5. Do not provide any answer unrelated to techolution.",
+    "question": query,
+    "prompt": system_prompt,
     "referenceDocsCount": 19,
     "proposals_file": "",
     "proposals_section": "",
@@ -109,7 +110,7 @@ def send_to_generatereadme_assistant(content):
 def update_readme(base_dir, changed_files):
     try:
         root_readme_path = os.path.join(base_dir, "README.md")
-
+        print("Generating README files for the root directory....")
         # Handle the root README
         if not os.path.exists(root_readme_path):
             print(f"Creating README in {base_dir}")
@@ -126,8 +127,11 @@ def update_readme(base_dir, changed_files):
 
         # Handle subdirectories
         for root, dirs, files in os.walk(base_dir):
-            if not dir_name.startswith("."):
-                for dir_name in dirs:
+            print("Handling subdirectories... ", root)
+            for dir_name in dirs:
+                print("Directory Name - ", dir_name)
+                if not dir_name.startswith("."):
+                    print("Directory is not a hidden one!")
                     dir_path = os.path.join(root, dir_name)
                     readme_path = os.path.join(dir_path, "README.md")
 
@@ -148,8 +152,8 @@ def update_readme(base_dir, changed_files):
                                 with open(readme_path, "w", encoding="utf-8") as f:
                                     f.write(readme_content)
                                 break
-            else:
-                print(f"Skipping hidden directory {dir_name}")
+                else:
+                    print(f"Skipping hidden directory {dir_name}")
 
         return "Successfully updated README files."
     except Exception as e:
@@ -194,7 +198,7 @@ def generate_readme_content(contents: str) -> str:
         str: The generated README content.
     """
     try:
-        response = send_to_generatereadme_assistant(contents)
+        response = send_to_ellm_agent(system_prompt=get_read_me_prompt(), query=contents)
         return response
     except Exception as e:
         data = {"contents": contents}
